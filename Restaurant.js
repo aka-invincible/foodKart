@@ -20,12 +20,15 @@ class Restaurant {
         return this.menuItems.get(itemName);
     }
 
+    setProcessingCapacity(capacity) {
+        this.processingCapacity = capacity;
+    }
+
     addOrder(order) {
         if (this.ordersCompleted.length < this.processingCapacity) {
             this.ordersCompleted.push(order);
         } else {
-            throw new Error(`Processing capacity reached for restaurant: ${this.name}. Cannot add more orders.`);
+            throw new Error(`Processing capacity exceeded for restaurant: ${this.name}`);
         }
     }
-
 }
