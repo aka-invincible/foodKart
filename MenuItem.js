@@ -1,4 +1,4 @@
-class MenuItem {
+export class MenuItem {
     constructor(id, name, price, isAvailable) {
         this.id = id;
         this.name = name;
@@ -11,15 +11,15 @@ class MenuItem {
     }
 
     getName() {
-        return name;
+        return this.name;
     }
 
     getPrice() {
-        return price;
+        return this.price;
     }
 
     getIsAvailable() {
-        return isAvailable;
+        return this.isAvailable;
     }
 
     setName(name) {

@@ -1,4 +1,5 @@
-class Order {
+import { OrderStatus } from './OrderStatus.js';
+export class Order {
     constructor(id, restaurantName, restaurantId) {
         this.id = id;
         this.restaurantName = restaurantName;

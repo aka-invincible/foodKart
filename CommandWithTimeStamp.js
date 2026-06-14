@@ -1,6 +1,6 @@
 export class CommandWithTimeStamp {
 
-    CommandWithTimeStamp(timestamp, command) {
+    constructor(timestamp, command) {
         this.timestamp = timestamp;
         this.command = command;
     }

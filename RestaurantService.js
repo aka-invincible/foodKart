@@ -1,4 +1,4 @@
-class RestaurantServices {
+export class RestaurantService {
 
     constructor() {
         this.restaurants = new Map();
@@ -34,7 +34,10 @@ class RestaurantServices {
             throw new Error(`Menu item ${updateMenuItemName} not found in restaurant ${restaurant.name}.`);
         }
 
-        menuItem.update(price, isAvailable);
+
+        menuItem.setPrice(price);
+        menuItem.setIsAvailable(isAvailable);
+        restaurant.addMenuItem(menuItem);
     }
 
     updateProcessingCapacity(restaurantId, newCapacity) {

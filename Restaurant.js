@@ -1,4 +1,4 @@
-class Restaurant {
+export class Restaurant {
     constructor(id, name, address, processingCapacity) {
         this.id = id;
         this.name = name;
@@ -6,6 +6,14 @@ class Restaurant {
         this.processingCapacity = processingCapacity;
         this.menuItems = new Map();
         this.ordersCompleted = [];
+    }
+
+    getName() {
+        return this.name;
+    }
+
+    getId() {
+        return this.id;
     }
 
     addMenuItem(item) {
@@ -18,6 +26,14 @@ class Restaurant {
 
     getMenuItem(itemName) {
         return this.menuItems.get(itemName);
+    }
+
+    getMenuItems() {
+        return this.menuItems;
+    }
+
+    getProcessingCapacity() {
+        return this.processingCapacity;
     }
 
     setProcessingCapacity(capacity) {

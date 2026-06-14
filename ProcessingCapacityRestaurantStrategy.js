@@ -1,4 +1,4 @@
-class ProcessingCapacityRestaurantStrategy {
+export class ProcessingCapacityRestaurantStrategy {
     findRestaurant(availableRestaurants, menuListItems) {
         if (!availableRestaurants || availableRestaurants.length === 0) return null;
 

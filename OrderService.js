@@ -1,7 +1,11 @@
-class OrderService {
+import { Order } from './Order.js'
+import { OrderStatus } from './OrderStatus.js';
+export class OrderService {
     constructor(restaurantService, restaurantSelectionStrategy) {
         this.restaurantService = restaurantService;
         this.restaurantSelectionStrategy = restaurantSelectionStrategy;
+        this.orders = [];
+        this.dispatchedOrders = [];
     }
 
     createAndPlaceOrder(menuItemsList, orderId) {
@@ -9,7 +13,7 @@ class OrderService {
             throw new Error("Invalid menu items list");
         }
 
-        let restaurants = this.restaurantService.getRestaurants();
+        let restaurants = this.restaurantService.getAllRestaurants();
         let selectedRestaurant = this.restaurantSelectionStrategy.findRestaurant(restaurants, menuItemsList);
 
         if (!selectedRestaurant) {
@@ -29,8 +33,7 @@ class OrderService {
             }
         }
 
-        let order = new Order(orderId, selectedRestaurant.getName(),
-            selectedRestaurant.getId());
+        let order = new Order(orderId, selectedRestaurant.getName(), selectedRestaurant.getId());
 
         order.setItemsList(menuItemListToBeOrdered);
 
@@ -43,9 +46,9 @@ class OrderService {
         order.setTotalPrice(totalPrice);
         selectedRestaurant.addOrder(order);
 
-        this.restaurantService.updateProcessing(selectedRestaurant.getId(), selectedRestaurant.getProcessingCapacity() - menuItemListToBeOrdered.size);
+        this.restaurantService.updateProcessingCapacity(selectedRestaurant.getId(), selectedRestaurant.getProcessingCapacity() - menuItemListToBeOrdered.size);
 
-        orders.add(order);
+        this.orders.push((order));
         return order;
     }
 
@@ -57,13 +60,15 @@ class OrderService {
             throw new Error("Order is already dispatched");
         }
         order.setStatus(OrderStatus.DISPATCHED);
+        let restaurantId = order.getRestaurantId();
+        let restaurant = this.restaurantService.getRestaurant(restaurantId);
         let processingCapacityConsumed = 0;
         for (let quantity of order.getItemsList().values()) {
             processingCapacityConsumed += quantity;
         }
-        this.restaurantService.updateProcessing(order.getRestaurantId(), this.restaurantService.getProcessingCapacity(order.getRestaurantId()) - processingCapacityConsumed);
+        this.restaurantService.updateProcessingCapacity(order.getRestaurantId(), restaurant.getProcessingCapacity() - processingCapacityConsumed);
 
-        dispatchedOrders.add(order);
+        this.dispatchedOrders.push(order);
         return order;
     }
 
@@ -72,11 +77,14 @@ class OrderService {
     }
 
     getOrder(orderId) {
-        for (let order of orders) {
-            if (order.getId() === orderId) {
+        // console.log(orderId, " ", typeof orderId);
+        for (let order of this.orders) {
+            // console.log(`Order found: ${order.getId()} of type ${typeof order.getId()}`);
+            if (order.getId() == orderId) {
                 return order;
             }
         }
+
         throw new Error(`Order with id ${orderId} not found`);
     }
 
